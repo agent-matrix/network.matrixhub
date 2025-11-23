@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "network-matrixhub-backend"
+version = "0.1.0"
+description = "Backend API for network.matrixhub.io (MatrixHub agent network)"
+readme = "README.md"
+license = "MIT"  # SPDX expression as a simple string (no deprecation warning)
+requires-python = ">=3.11"
+
+authors = [
+  { name = "MatrixHub", email = "support@matrixhub.io" },
+]
+
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "pydantic>=2.7.0",
+  "pydantic-settings>=2.3.0",
+  "sqlalchemy>=2.0.0",
+  "alembic>=1.13.0",
+  "httpx>=0.27.0",
+  "orjson>=3.10.0",
+  "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2.0",
+  "pytest-asyncio>=0.23.0",
+  "httpx>=0.27.0",
+  "ruff>=0.6.0",
+  "black>=24.8.0",
+  "mypy>=1.11.0",
+]
+
+[project.urls]
+Homepage = "https://network.matrixhub.io"
+Repository = "https://github.com/YOUR_ORG/network.matrixhub.io"
+
+# ---------------------------------------------------------------------------
+# Setuptools: restrict packaging to the FastAPI `app` package only
+# ---------------------------------------------------------------------------
+[tool.setuptools]
+packages = ["app"]
