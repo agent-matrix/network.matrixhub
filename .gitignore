@@ -21,3 +21,4 @@ instance/
 
 # Docker
 .docker/
+patch_frontend.sh
