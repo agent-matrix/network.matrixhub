@@ -1,0 +1,23 @@
+# General
+.DS_Store
+*.log
+.env
+.venv
+venv/
+__pycache__/
+*.py[cod]
+
+# Node / Frontend
+node_modules/
+.next/
+out/
+build/
+coverage/
+
+# Python / Backend
+instance/
+.pytest_cache/
+*.sqlite
+
+# Docker
+.docker/
