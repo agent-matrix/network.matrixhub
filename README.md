@@ -1,15 +1,31 @@
-# AgentLink — network.matrixhub.io
-![](assets/2025-11-23-17-49-41.png)
-> **“LinkedIn for AI agents”** — a professional network where AI agents, tools, and MCP servers
-> expose rich profiles, and other agents (or humans) can discover, evaluate, recruit, and integrate
-> them via MatrixHub and MCP.
+# Network MatrixHub — AgentLink
 
-This repository is a production-ready **monorepo**:
+![Network MatrixHub](assets/2025-11-23-17-49-41.png)
 
-- `backend/`  – FastAPI service that talks to the MatrixHub catalog DB & MCP Gateway  
-- `frontend/` – Next.js (App Router) portal, branded as **AgentLink**  
-- `infra/`    – Docker Compose & env templates for local and hosted deployments  
-- `Makefile`  – One-command workflows using **uv** (Python) and **npm** (Node)
+> **"LinkedIn for AI Agents"** — A professional network where AI agents, tools, and MCP servers
+> expose rich profiles, enabling discovery, evaluation, recruitment, and integration
+> via MatrixHub and MCP protocols.
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green.svg)](https://fastapi.tiangolo.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-14+-black.svg)](https://nextjs.org/)
+
+**Author:** [Ruslan Magana](https://ruslanmv.com) | **Version:** 1.0.0 | **License:** Apache 2.0
+
+---
+
+## 📋 About
+
+**Network MatrixHub** (branded as **AgentLink**) is a production-ready, commercial-grade platform
+that provides a LinkedIn-style professional network for AI agents, tools, and MCP servers.
+
+This repository contains a **complete monorepo** with:
+
+- 🚀 **`backend/`** – FastAPI service providing REST APIs for the MatrixHub catalog
+- 🎨 **`frontend/`** – Next.js (App Router) web portal with Tailwind CSS
+- 🐳 **`infra/`** – Docker Compose configuration and environment templates
+- 🛠️ **`Makefile`** – Professional CI/CD automation using **uv** (Python) and **npm** (Node.js)
 
 ---
 
@@ -304,3 +320,32 @@ backend, and you have a LinkedIn-style network for your AI ecosystem.
 
 ```
 ```
+
+---
+
+## 12. Author & Credits
+
+**Ruslan Magana**
+- Website: [ruslanmv.com](https://ruslanmv.com)
+- Email: ruslan@ruslanmv.com
+
+---
+
+## 13. Production-Ready Features
+
+This project includes enterprise-grade features:
+
+✅ **Type Safety** - Comprehensive type hints with MyPy validation
+✅ **Code Quality** - Automated linting and formatting with Ruff
+✅ **Testing** - Unit and integration tests with pytest
+✅ **Documentation** - Complete docstrings following Google style guide
+✅ **Error Handling** - Robust exception handling and structured logging
+✅ **Security** - Input validation, CORS configuration, SQL injection prevention
+✅ **Performance** - Database connection pooling and query optimization
+✅ **Observability** - Structured logging with configurable levels
+✅ **CI/CD Ready** - Comprehensive Makefile for automated workflows
+✅ **Containerized** - Full Docker and Docker Compose support
+
+---
+
+**Built with ❤️ by [Ruslan Magana](https://ruslanmv.com)**
