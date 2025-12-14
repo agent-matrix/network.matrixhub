@@ -189,7 +189,7 @@ The project is configured with:
 - ✅ Static page generation where possible
 - ✅ Image optimization
 - ✅ Security headers
-- ✅ Standalone output for optimal bundle size
+- ✅ Optimized for Vercel deployment
 
 ## Support
 

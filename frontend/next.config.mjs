@@ -6,9 +6,6 @@ const nextConfig = {
   // Enable SWC minification for better performance
   swcMinify: true,
 
-  // Output configuration for Vercel
-  output: 'standalone',
-
   // Image optimization
   images: {
     domains: ['api.dicebear.com', 'picsum.photos'],
