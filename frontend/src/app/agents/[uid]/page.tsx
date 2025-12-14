@@ -13,7 +13,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import axios from "axios";
 import {
   ArrowLeft,
   Star,
@@ -69,10 +68,14 @@ export default function AgentProfilePage() {
     const fetchEntity = async () => {
       setLoading(true);
       try {
-        const res = await axios.get<EntityRead>(
+        const res = await fetch(
           `${API_BASE}/api/entities/${encodeURIComponent(uid)}`
         );
-        setEntity(res.data);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch entity: ${res.status}`);
+        }
+        const data: EntityRead = await res.json();
+        setEntity(data);
       } catch (err) {
         console.error("Failed to load entity", err);
         setEntity(null);

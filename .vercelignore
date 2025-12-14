@@ -1,0 +1,18 @@
+# Backend files
+backend/
+infra/
+assets/
+
+# Documentation
+README.md
+LICENSE
+Makefile
+
+# Git
+.git
+.gitignore
+
+# Environment files (these should be configured in Vercel dashboard)
+**/.env
+**/.env.local
+**/.env.*.local
