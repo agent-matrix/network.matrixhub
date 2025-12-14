@@ -16,8 +16,8 @@ UV             := uv
 .PHONY: \
 	help dev \
 	backend backend-uv backend-shell install-backend lint-backend fmt-backend test-backend typecheck-backend coverage-backend clean-backend \
-	frontend install-frontend lint-frontend fmt-frontend clean-frontend \
-	install lint fmt test typecheck coverage clean all
+	frontend install-frontend lint-frontend fmt-frontend clean-frontend build-frontend serve \
+	install lint fmt test typecheck coverage clean all build
 
 # ---------------------------------------------------------------------------
 # Help
@@ -40,6 +40,10 @@ help:
 	@echo "  make backend          - Run FastAPI backend server (http://0.0.0.0:8000)"
 	@echo "  make frontend         - Run Next.js frontend server (http://localhost:3000)"
 	@echo "  make dev              - Show this help menu"
+	@echo ""
+	@echo "🔨 Build & Deploy (Vercel Simulation):"
+	@echo "  make build            - Build frontend for production (simulates Vercel build)"
+	@echo "  make serve            - Serve production build locally (http://localhost:3000)"
 	@echo ""
 	@echo "🔍 Code Quality:"
 	@echo "  make lint             - Run linters on backend and frontend"
@@ -151,6 +155,14 @@ clean-frontend:
 	@echo ">> [frontend] Cleaning node_modules and .next..."
 	cd $(FRONTEND_DIR) && rm -rf node_modules .next
 
+build-frontend: install-frontend  ## Build Next.js for production
+	@echo ">> [frontend] Building Next.js for production..."
+	cd $(FRONTEND_DIR) && npm run build
+
+serve: build-frontend  ## Serve production build locally
+	@echo ">> [frontend] Serving production build on http://localhost:3000 ..."
+	cd $(FRONTEND_DIR) && npm run start
+
 # ---------------------------------------------------------------------------
 # Aggregates
 # ---------------------------------------------------------------------------
@@ -168,6 +180,12 @@ typecheck: typecheck-backend
 coverage: coverage-backend
 
 clean: clean-backend clean-frontend
+
+build: build-frontend  ## Build for production (simulates Vercel deployment)
+	@echo ""
+	@echo "✅ Production build complete! Ready for deployment."
+	@echo "   Run 'make serve' to test the production build locally."
+	@echo ""
 
 all: install lint typecheck test  ## Run complete CI/CD pipeline
 	@echo ""
