@@ -1,18 +1,50 @@
-# Backend files
-backend/
+# Dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs (except what Vercel needs)
+backend/.venv/
+backend/dist/
+backend/build/
+backend/*.egg-info/
+
+# Local development
 infra/
 assets/
-
-# Documentation
-README.md
-LICENSE
-Makefile
+*.md
+!README.md
 
 # Git
-.git
+.git/
 .gitignore
-
-# Environment files (these should be configured in Vercel dashboard)
-**/.env
-**/.env.local
-**/.env.*.local

@@ -15,9 +15,9 @@ UV             := uv
 
 .PHONY: \
 	help dev \
-	backend backend-uv backend-shell install-backend lint-backend fmt-backend test-backend typecheck-backend coverage-backend clean-backend \
+	backend backend-uv backend-shell install-backend lint-backend fmt-backend clean-backend \
 	frontend install-frontend lint-frontend fmt-frontend clean-frontend \
-	install lint fmt test typecheck coverage clean all
+	install lint fmt clean
 
 # ---------------------------------------------------------------------------
 # Help
@@ -25,44 +25,17 @@ UV             := uv
 
 help:
 	@echo ""
-	@echo "╔════════════════════════════════════════════════════════════════════════╗"
-	@echo "║         Network MatrixHub - Production-Ready Development CLI           ║"
-	@echo "║                   Author: Ruslan Magana                                ║"
-	@echo "║                   Website: ruslanmv.com                                ║"
-	@echo "╚════════════════════════════════════════════════════════════════════════╝"
+	@echo "network.matrixhub.io – top-level Makefile"
 	@echo ""
-	@echo "📦 Installation & Setup:"
-	@echo "  make install          - Install all dependencies (backend + frontend)"
-	@echo "  make install-backend  - Install Python backend dependencies via uv"
-	@echo "  make install-frontend - Install Node.js frontend dependencies via npm"
-	@echo ""
-	@echo "🚀 Development Servers:"
-	@echo "  make backend          - Run FastAPI backend server (http://0.0.0.0:8000)"
-	@echo "  make frontend         - Run Next.js frontend server (http://localhost:3000)"
-	@echo "  make dev              - Show this help menu"
-	@echo ""
-	@echo "🔍 Code Quality:"
-	@echo "  make lint             - Run linters on backend and frontend"
-	@echo "  make lint-backend     - Run ruff linter on backend Python code"
-	@echo "  make lint-frontend    - Run ESLint on frontend TypeScript/React code"
-	@echo "  make fmt              - Format all code (backend + frontend)"
-	@echo "  make fmt-backend      - Format backend code with ruff"
-	@echo "  make fmt-frontend     - Format frontend code with ESLint --fix"
-	@echo ""
-	@echo "✅ Testing & Type Checking:"
-	@echo "  make test             - Run all tests (backend + frontend)"
-	@echo "  make test-backend     - Run pytest tests for backend"
-	@echo "  make typecheck        - Run type checkers (mypy for backend)"
-	@echo "  make typecheck-backend - Run mypy type checker on backend"
-	@echo "  make coverage         - Generate test coverage reports"
-	@echo "  make coverage-backend - Generate coverage report for backend"
-	@echo ""
-	@echo "🛠️  Utilities:"
-	@echo "  make backend-shell    - Open shell with backend venv activated"
-	@echo "  make clean            - Remove all build artifacts and caches"
-	@echo "  make clean-backend    - Clean backend venv and caches"
-	@echo "  make clean-frontend   - Clean frontend node_modules and .next"
-	@echo "  make all              - Install, lint, test, and typecheck everything"
+	@echo "Common targets:"
+	@echo "  make dev              - show this help (dev entrypoint)"
+	@echo "  make backend          - run backend dev server (FastAPI via uv)"
+	@echo "  make frontend         - run frontend dev server (Next.js)"
+	@echo "  make install          - install backend (uv) and frontend (npm) deps"
+	@echo "  make lint             - run linters for backend and frontend"
+	@echo "  make fmt              - run formatters for backend and frontend"
+	@echo "  make backend-shell    - open a shell with backend venv via uv"
+	@echo "  make clean            - remove backend venv and frontend build artifacts"
 	@echo ""
 
 dev: help
@@ -95,27 +68,11 @@ fmt-backend: install-backend  ## Format backend with ruff format
 	@echo ">> [backend] Ruff format..."
 	cd $(BACKEND_DIR) && UV_PROJECT_ENVIRONMENT=$(BACKEND_VENV) $(UV) run ruff format app
 
-test-backend: install-backend  ## Run pytest tests for backend
-	@echo ">> [backend] Running pytest..."
-	cd $(BACKEND_DIR) && UV_PROJECT_ENVIRONMENT=$(BACKEND_VENV) $(UV) run pytest tests/ -v
-
-typecheck-backend: install-backend  ## Run mypy type checker on backend
-	@echo ">> [backend] Running mypy type checker..."
-	cd $(BACKEND_DIR) && UV_PROJECT_ENVIRONMENT=$(BACKEND_VENV) $(UV) run mypy app
-
-coverage-backend: install-backend  ## Generate test coverage report for backend
-	@echo ">> [backend] Generating coverage report..."
-	cd $(BACKEND_DIR) && UV_PROJECT_ENVIRONMENT=$(BACKEND_VENV) $(UV) run pytest tests/ --cov=app --cov-report=html --cov-report=term-missing
-	@echo ">> Coverage report generated at backend/htmlcov/index.html"
-
 clean-backend:
 	@echo ">> [backend] Cleaning venv and caches..."
 	rm -rf "$(BACKEND_VENV)" \
 	       "$(BACKEND_DIR)/.ruff_cache" \
-	       "$(BACKEND_DIR)/.pytest_cache" \
-	       "$(BACKEND_DIR)/.mypy_cache" \
-	       "$(BACKEND_DIR)/htmlcov" \
-	       "$(BACKEND_DIR)/.coverage"
+	       "$(BACKEND_DIR)/.pytest_cache"
 
 # ---------------------------------------------------------------------------
 # Frontend (Next.js / npm)
@@ -161,15 +118,4 @@ lint: lint-backend lint-frontend
 
 fmt: fmt-backend fmt-frontend
 
-test: test-backend
-
-typecheck: typecheck-backend
-
-coverage: coverage-backend
-
 clean: clean-backend clean-frontend
-
-all: install lint typecheck test  ## Run complete CI/CD pipeline
-	@echo ""
-	@echo "✅ All checks passed! Project is production-ready."
-	@echo ""

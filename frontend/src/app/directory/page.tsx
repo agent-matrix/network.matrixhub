@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
@@ -33,15 +34,10 @@ export default function DirectoryPage() {
       if (type) params.type = type;
       if (protocol) params.protocol = protocol;
 
-      const queryString = new URLSearchParams(params).toString();
-      const url = `${API_BASE}/api/entities${queryString ? `?${queryString}` : ''}`;
-
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error(`Failed to fetch entities: ${res.status}`);
-      }
-      const data: EntitySearchItem[] = await res.json();
-      setItems(data);
+      const res = await axios.get<EntitySearchItem[]>(`${API_BASE}/api/entities`, {
+        params,
+      });
+      setItems(res.data);
     } catch (err) {
       console.error("Failed to fetch entities", err);
       setItems([]);
