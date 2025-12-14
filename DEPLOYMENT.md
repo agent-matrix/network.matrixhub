@@ -81,13 +81,14 @@ vercel --prod
 The project includes pre-configured Vercel deployment files:
 
 ### Root Level
-- **`vercel.json`**: Main Vercel configuration
 - **`.vercelignore`**: Files to exclude from deployment
 
 ### Frontend Level
-- **`frontend/vercel.json`**: Frontend-specific configuration
+- **`frontend/vercel.json`**: Vercel configuration (framework, build commands, regions)
 - **`frontend/.vercelignore`**: Frontend exclusions
 - **`frontend/next.config.mjs`**: Next.js production configuration
+
+**Important**: The Root Directory must be set to `frontend` in the Vercel dashboard project settings, as `vercel.json` does not support the `rootDirectory` property.
 
 ## Environment Variables
 
@@ -167,9 +168,9 @@ network.matrixhub/
 │   │   └── app/          # App router pages
 │   ├── .env.local        # Local environment (not committed)
 │   ├── .env.example      # Example environment variables
+│   ├── .vercelignore     # Files excluded from deployment
 │   └── vercel.json       # Vercel configuration
 ├── backend/              # Backend API (deploy separately)
-├── vercel.json           # Root Vercel configuration
 └── .vercelignore         # Files excluded from deployment
 ```
 
