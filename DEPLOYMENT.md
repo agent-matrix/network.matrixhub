@@ -8,6 +8,20 @@ This guide explains how to deploy the Network MatrixHub project to Vercel for pr
 - Git repository with your code
 - Backend API deployed (optional, can use environment variables to configure)
 
+## Local Testing Before Deployment
+
+Before deploying to Vercel, test the production build locally:
+
+```bash
+# Build the production version (simulates Vercel build process)
+make build
+
+# Serve the production build locally at http://localhost:3000
+make serve
+```
+
+This ensures your application builds successfully and works as expected before deploying to Vercel.
+
 ## Quick Deploy to Vercel
 
 ### Option 1: Deploy via Vercel Dashboard
@@ -104,6 +118,27 @@ After deployment:
 
 ## Troubleshooting
 
+### ⚠️ "No Next.js version detected" Error
+
+**This is the most common deployment error!**
+
+If you see this error:
+```
+Error: No Next.js version detected. Make sure your package.json has "next"
+in either "dependencies" or "devDependencies".
+```
+
+**Solution**: Set the **Root Directory** to `frontend` in your Vercel project settings:
+
+1. Go to your project in the Vercel dashboard
+2. Click **Settings** → **General**
+3. Find **Root Directory** section
+4. Enter: `frontend`
+5. Click **Save**
+6. Redeploy your project
+
+This tells Vercel where to find the `package.json` file with Next.js dependencies.
+
 ### 404 Errors
 If you see 404 errors:
 - Ensure the root directory is set to `frontend`
@@ -115,6 +150,7 @@ If build fails:
 - Check build logs in Vercel dashboard
 - Ensure all dependencies are in `package.json`
 - Verify TypeScript has no errors
+- Test locally first with `make build` command
 
 ### API Connection Issues
 If API calls fail:
