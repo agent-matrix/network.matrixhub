@@ -1,7 +1,8 @@
 {
-  "buildCommand": "cd frontend && npm ci --include=dev && npm run build",
-  "devCommand": "cd frontend && npm run dev",
-  "installCommand": "cd frontend && npm ci --include=dev",
+  "buildCommand": "npm ci --include=dev && npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm ci --include=dev",
   "framework": "nextjs",
-  "outputDirectory": "frontend/.next"
+  "outputDirectory": ".next",
+  "rootDirectory": "frontend"
 }
