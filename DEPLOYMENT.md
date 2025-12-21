@@ -6,7 +6,7 @@ This guide explains how to deploy the Network MatrixHub project to Vercel for pr
 
 - A Vercel account (sign up at [vercel.com](https://vercel.com))
 - Git repository with your code
-- Backend API deployed (optional, can use environment variables to configure)
+- **Backend API deployed** (REQUIRED - see [Backend Deployment](#backend-deployment) section below)
 
 ## Local Testing Before Deployment
 
@@ -94,10 +94,75 @@ The project includes pre-configured Vercel deployment files:
 
 Set these in the Vercel dashboard under Settings → Environment Variables:
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `NEXT_PUBLIC_API_BASE_URL` | Backend API base URL | `https://api.matrixhub.com` |
-| `NEXT_PUBLIC_APP_NAME` | Application name | `Network MatrixHub` |
+| Variable | Description | Example | Required |
+|----------|-------------|---------|----------|
+| `NEXT_PUBLIC_API_BASE_URL` | Backend API base URL | `https://api.matrixhub.com` | **Yes** |
+| `NEXT_PUBLIC_APP_NAME` | Application name | `Network MatrixHub` | No |
+
+**IMPORTANT**: You MUST set `NEXT_PUBLIC_API_BASE_URL` to your deployed backend URL. The frontend uses Next.js rewrites to proxy all `/api/*` requests to your backend. If this environment variable is not set, API calls will fail with 404 errors.
+
+## Backend Deployment
+
+**CRITICAL**: The frontend requires a separately deployed FastAPI backend. The backend cannot be deployed to Vercel alongside the frontend.
+
+### Recommended Backend Hosting Options
+
+Choose one of these platforms to deploy your backend:
+
+1. **Render** (Recommended)
+   - Go to [render.com](https://render.com)
+   - Create a new Web Service
+   - Connect your GitHub repository
+   - Set **Root Directory** to `backend`
+   - Set **Build Command**: `pip install -r requirements.txt`
+   - Set **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+   - Add environment variables (see `backend/.env.example`)
+   - Deploy
+
+2. **Railway**
+   - Go to [railway.app](https://railway.app)
+   - Create a new project from your GitHub repository
+   - Set root directory to `backend`
+   - Railway will auto-detect the Python app
+   - Configure environment variables
+   - Deploy
+
+3. **Fly.io**
+   - Install flyctl CLI
+   - Navigate to `backend/` directory
+   - Run `fly launch`
+   - Configure as needed
+   - Run `fly deploy`
+
+4. **DigitalOcean App Platform**
+   - Create a new app from your GitHub repository
+   - Select the `backend` directory
+   - Choose Python as the runtime
+   - Configure environment variables
+   - Deploy
+
+### Backend Environment Variables
+
+Your backend deployment needs these environment variables (see `infra/.env.backend.example`):
+
+```bash
+APP_NAME="Network MatrixHub IO Backend"
+APP_ENV="production"
+APP_DEBUG=false
+DATABASE_URL="postgresql+psycopg2://user:password@host:5432/matrixhub"
+BACKEND_CORS_ORIGINS='["https://your-vercel-app.vercel.app"]'
+```
+
+**Important**: Update `BACKEND_CORS_ORIGINS` to include your Vercel deployment URL(s).
+
+### After Backend Deployment
+
+Once your backend is deployed:
+
+1. Copy the backend URL (e.g., `https://your-backend.onrender.com`)
+2. Go to your Vercel project → Settings → Environment Variables
+3. Set `NEXT_PUBLIC_API_BASE_URL` to your backend URL
+4. Redeploy your Vercel frontend
 
 ## Post-Deployment
 
@@ -105,17 +170,22 @@ After deployment:
 
 1. **Test the Application**
    - Visit your Vercel URL
+   - Open browser DevTools → Network tab
    - Test all routes: `/`, `/directory`, `/agents/[uid]`
-   - Verify API connections work
+   - Verify API calls in Network tab show:
+     - Request URL: `/api/entities` (stays on same domain)
+     - Status: 200 OK
+     - Response: JSON data from backend
 
 2. **Set up Custom Domain** (Optional)
    - Go to your project settings in Vercel
    - Add your custom domain
    - Update DNS records as instructed
+   - **Important**: Update backend `BACKEND_CORS_ORIGINS` to include your custom domain
 
 3. **Configure Production API**
-   - Update `NEXT_PUBLIC_API_BASE_URL` to point to your production backend
-   - Ensure CORS is configured on the backend to allow your Vercel domain
+   - Ensure `NEXT_PUBLIC_API_BASE_URL` points to your production backend
+   - Ensure backend CORS allows your Vercel domain(s)
 
 ## Troubleshooting
 
@@ -140,8 +210,22 @@ in either "dependencies" or "devDependencies".
 
 This tells Vercel where to find the `package.json` file with Next.js dependencies.
 
-### 404 Errors
-If you see 404 errors:
+### 404 Errors on API Calls
+
+If you see 404 errors like `404: NOT_FOUND` from Vercel when calling `/api/entities`:
+
+**Root Cause**: The backend is not deployed or `NEXT_PUBLIC_API_BASE_URL` is not set correctly.
+
+**Solution**:
+1. Deploy your backend to a hosting platform (see [Backend Deployment](#backend-deployment))
+2. Set `NEXT_PUBLIC_API_BASE_URL` in Vercel → Settings → Environment Variables
+3. Redeploy your Vercel frontend
+4. Verify in DevTools that API calls are being proxied to your backend
+
+**How it works**: The frontend uses Next.js rewrites (configured in `frontend/next.config.mjs`) to proxy all `/api/*` requests to your backend URL. This keeps the frontend and API on the same domain, avoiding CORS issues.
+
+### 404 Errors on Pages
+If you see 404 errors on pages:
 - Ensure the root directory is set to `frontend`
 - Check that `src/app` directory exists (not duplicate `app` folders)
 - Verify build completed successfully

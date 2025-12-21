@@ -3,9 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
-
 export interface EntitySearchItem {
   id: string;
   type: string;
@@ -34,7 +31,7 @@ export default function DirectoryPage() {
       if (protocol) params.protocol = protocol;
 
       const queryString = new URLSearchParams(params).toString();
-      const url = `${API_BASE}/api/entities${queryString ? `?${queryString}` : ''}`;
+      const url = `/api/entities${queryString ? `?${queryString}` : ''}`;
 
       const res = await fetch(url);
       if (!res.ok) {
