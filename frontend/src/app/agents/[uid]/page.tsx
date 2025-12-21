@@ -30,9 +30,6 @@ import {
   Award,
 } from "lucide-react";
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
-
 interface EntityRead {
   id: string;
   type: string;
@@ -69,7 +66,7 @@ export default function AgentProfilePage() {
       setLoading(true);
       try {
         const res = await fetch(
-          `${API_BASE}/api/entities/${encodeURIComponent(uid)}`
+          `/api/entities/${encodeURIComponent(uid)}`
         );
         if (!res.ok) {
           throw new Error(`Failed to fetch entity: ${res.status}`);

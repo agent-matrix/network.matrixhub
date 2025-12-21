@@ -32,6 +32,18 @@ const nextConfig = {
     ignoreDuringBuilds: false,
   },
 
+  // Rewrites for API proxy
+  async rewrites() {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${apiBaseUrl}/api/:path*`,
+      },
+    ];
+  },
+
   // Headers for security
   async headers() {
     return [
