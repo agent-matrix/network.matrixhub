@@ -191,3 +191,78 @@ all: install lint typecheck test  ## Run complete CI/CD pipeline
 	@echo ""
 	@echo "✅ All checks passed! Project is production-ready."
 	@echo ""
+
+# ---------------------------------------------------------------------------
+# Docker Commands (Production Deployment)
+# ---------------------------------------------------------------------------
+
+build-container:  ## Build Docker containers for production
+	@echo ">> [docker] Building production containers..."
+	docker-compose build --parallel
+	@echo "✅ Containers built successfully!"
+
+run-container:  ## Run Docker containers in detached mode
+	@echo ">> [docker] Starting containers..."
+	docker-compose up -d
+	@echo ""
+	@echo "✅ Containers started successfully!"
+	@echo "   Frontend: http://localhost:3000"
+	@echo "   Backend:  http://localhost:8000"
+	@echo "   API Docs: http://localhost:8000/docs"
+	@echo "   Database: localhost:5432"
+	@echo ""
+	@echo "Run 'make docker-logs' to view logs"
+	@echo "Run 'make stop-container' to stop containers"
+	@echo ""
+
+stop-container:  ## Stop running Docker containers
+	@echo ">> [docker] Stopping containers..."
+	docker-compose stop
+	@echo "✅ Containers stopped!"
+
+docker-down:  ## Stop and remove Docker containers
+	@echo ">> [docker] Stopping and removing containers..."
+	docker-compose down
+	@echo "✅ Containers removed!"
+
+docker-up:  ## Start containers (build if needed)
+	@echo ">> [docker] Starting containers with build..."
+	docker-compose up -d --build
+	@echo "✅ Containers running!"
+
+docker-logs:  ## View container logs (follow mode)
+	@echo ">> [docker] Showing container logs (Ctrl+C to exit)..."
+	docker-compose logs -f
+
+docker-ps:  ## List running containers
+	@echo ">> [docker] Container status:"
+	docker-compose ps
+
+clean-container:  ## Remove containers, volumes, and images
+	@echo ">> [docker] Cleaning up Docker resources..."
+	docker-compose down -v --rmi all
+	@echo "✅ Docker resources cleaned!"
+
+build-backend-container:  ## Build backend container only
+	@echo ">> [docker] Building backend container..."
+	docker-compose build backend
+	@echo "✅ Backend container built!"
+
+restart-backend:  ## Restart backend container
+	@echo ">> [docker] Restarting backend..."
+	docker-compose restart backend
+	@echo "✅ Backend restarted!"
+
+backend-shell-docker:  ## Open shell in running backend container
+	@echo ">> [docker] Opening shell in backend container..."
+	docker-compose exec backend bash
+
+db-migrate:  ## Run database migrations in container
+	@echo ">> [docker] Running database migrations..."
+	docker-compose exec backend alembic upgrade head
+	@echo "✅ Migrations complete!"
+
+db-shell:  ## Open PostgreSQL shell
+	@echo ">> [docker] Opening PostgreSQL shell..."
+	docker-compose exec postgres psql -U matrixhub -d network_matrixhub
+

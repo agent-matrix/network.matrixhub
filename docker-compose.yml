@@ -1,0 +1,132 @@
+# =============================================================================
+# Network MatrixHub - Docker Compose Configuration
+# Author: Ruslan Magana
+# Description: Full-stack deployment with PostgreSQL, Backend API, and Frontend
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL Database
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: matrixhub-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-matrixhub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-matrixhub_secret_2024}
+      POSTGRES_DB: ${POSTGRES_DB:-network_matrixhub}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-matrixhub} -d ${POSTGRES_DB:-network_matrixhub}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - matrixhub-network
+
+  # ---------------------------------------------------------------------------
+  # Backend API (FastAPI)
+  # ---------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
+    container_name: matrixhub-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Application settings
+      APP_NAME: "Network MatrixHub IO Backend"
+      APP_ENV: ${APP_ENV:-production}
+      APP_DEBUG: ${APP_DEBUG:-false}
+
+      # Database connection
+      DATABASE_URL: postgresql://${POSTGRES_USER:-matrixhub}:${POSTGRES_PASSWORD:-matrixhub_secret_2024}@postgres:5432/${POSTGRES_DB:-network_matrixhub}
+
+      # CORS configuration
+      BACKEND_CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:3000","http://localhost","https://network.matrixhub.io"]}
+
+      # Server configuration
+      PORT: ${BACKEND_PORT:-8000}
+      WORKERS: ${BACKEND_WORKERS:-4}
+
+      # JWT/Auth settings (for future implementation)
+      SECRET_KEY: ${SECRET_KEY:-your-super-secret-key-change-in-production}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+    volumes:
+      - ./backend/app:/app/app:ro
+      - backend_logs:/app/logs
+      - backend_data:/app/data
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - matrixhub-network
+    command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers ${BACKEND_WORKERS:-4} --proxy-headers --forwarded-allow-ips='*'"
+
+  # ---------------------------------------------------------------------------
+  # Frontend (Static HTML - Production Build)
+  # ---------------------------------------------------------------------------
+  frontend:
+    image: nginx:alpine
+    container_name: matrixhub-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./public:/usr/share/nginx/html/public:ro
+      - ./infra/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - matrixhub-network
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  matrixhub-network:
+    driver: bridge
+    name: matrixhub-network
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  postgres_data:
+    name: matrixhub-postgres-data
+    driver: local
+  backend_logs:
+    name: matrixhub-backend-logs
+    driver: local
+  backend_data:
+    name: matrixhub-backend-data
+    driver: local
