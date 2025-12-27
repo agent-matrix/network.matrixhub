@@ -1,35 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Animations */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-@keyframes float-delayed {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-}
-
 @layer utilities {
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
-  
-  .animate-float-delayed {
-    animation: float-delayed 6s ease-in-out infinite 1s;
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
+
+/* JSON Syntax Highlighting */
+.key { color: #e06c75; }
+.string { color: #98c379; }
+.number { color: #d19a66; }
+.boolean { color: #56b6c2; }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -38,14 +27,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(15 23 42);
+  background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(51 65 85);
+  background: #888;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(71 85 105);
+  background: #555;
 }
