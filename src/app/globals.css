@@ -2,32 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Animations */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
+@layer base {
+  :root {
+    --color-primary: #0a66c2;
+    --color-secondary: #004182;
+    --color-accent: #378fe9;
+    --color-background: #f3f2ef;
+    --color-surface: #ffffff;
   }
-  50% {
-    transform: translateY(-20px);
-  }
-}
 
-@keyframes float-delayed {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-}
-
-@layer utilities {
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  .animate-float-delayed {
-    animation: float-delayed 6s ease-in-out infinite 1s;
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
   }
 }
 
@@ -38,14 +23,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(15 23 42);
+  background: #f3f2ef;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(51 65 85);
+  background: #c4c4c4;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(71 85 105);
+  background: #a8a8a8;
 }
