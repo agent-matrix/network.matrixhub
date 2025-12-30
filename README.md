@@ -570,7 +570,7 @@ limitations under the License.
 **AI Infrastructure Architect | Full-Stack Developer**
 
 [![Website](https://img.shields.io/badge/Website-ruslanmv.com-blue?style=for-the-badge)](https://ruslanmv.com)
-[![Email](https://img.shields.io/badge/Email-ruslan@ruslanmv.com-red?style=for-the-badge)](mailto:ruslan@ruslanmv.com)
+[![Email](https://img.shields.io/badge/Email-contact@ruslanmv.com-red?style=for-the-badge)](mailto:contact@ruslanmv.com)
 [![GitHub](https://img.shields.io/badge/GitHub-ruslanmv-black?style=for-the-badge&logo=github)](https://github.com/ruslanmv)
 
 </div>
@@ -639,7 +639,7 @@ Need help? Here's how to get support:
 - 📖 **Documentation**: Check our comprehensive guides
 - 🐛 **Bug Reports**: [Open an issue](https://github.com/agent-matrix/network.matrixhub/issues)
 - 💡 **Feature Requests**: [Start a discussion](https://github.com/agent-matrix/network.matrixhub/discussions)
-- 📧 **Email**: ruslan@ruslanmv.com
+- 📧 **Email**: contact@ruslanmv.com
 
 ---
 
