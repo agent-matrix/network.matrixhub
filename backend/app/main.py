@@ -39,11 +39,19 @@ app = FastAPI(
     openapi_url="/openapi.json",
 )
 
-# Configure CORS middleware
+# Configure CORS middleware with production hardening
+allow_origins = settings.cors_origins or ["*"]
+allow_credentials = True
+
+# In production/staging, disable credentials with wildcard origin (security best practice)
+# This prevents CORS attacks while still allowing API access
+if settings.APP_ENV in ("production", "staging", "prod"):
+    allow_credentials = False
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins or ["*"],
-    allow_credentials=True,
+    allow_origins=allow_origins,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )

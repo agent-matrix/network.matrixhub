@@ -74,6 +74,32 @@ class Settings(BaseSettings):
         description="Allowed CORS origins (comma-separated string or JSON list)",
     )
 
+    # -------- Matrix-Hub integration (optional but production recommended) --------
+    MATRIX_HUB_BASE: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("MATRIX_HUB_BASE", "MATRIXHUB_API_BASE", "HUB_URL"),
+        description="Base URL for Matrix-Hub (optional). Used to trigger ingest after publish.",
+    )
+    MATRIX_HUB_TOKEN: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("MATRIX_HUB_TOKEN", "MATRIX_TOKEN"),
+        description="Operator token for Matrix-Hub admin endpoints (optional).",
+    )
+
+    # Public base URL of this portal used to build absolute manifest URLs.
+    PUBLIC_BASE_URL: str = Field(
+        default="http://localhost:8000",
+        description="Public base URL for network.matrixhub backend (used in catalog export URLs).",
+    )
+
+    # Operator token for admin publishing endpoints in this backend.
+    # Keep it simple for now (shared token). Later replace with real auth/SSO.
+    OPERATOR_TOKEN: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("NETWORK_OPERATOR_TOKEN", "OPERATOR_TOKEN"),
+        description="Bearer token required for /api/admin/* mutation endpoints.",
+    )
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
