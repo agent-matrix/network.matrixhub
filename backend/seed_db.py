@@ -94,6 +94,24 @@ def seed_database():
                 updated_at=datetime.utcnow() - timedelta(days=10)
             ),
             Entity(
+                uid="tool-hermes-tweet-001",
+                type="tool",
+                name="Hermes Tweet",
+                version="0.1.6",
+                summary="Native Hermes Agent plugin for X workflows",
+                description="Hermes Tweet exposes X search, timeline reading, profile lookup, and opt-in posting actions through the Hermes Agent plugin lifecycle.",
+                capabilities=["x_search", "timeline_reading", "profile_lookup", "opt_in_posting"],
+                frameworks=["hermes-agent", "python"],
+                providers=[],
+                protocols=["hermes-plugin@0.1"],
+                quality_score=89.0,
+                license="MIT",
+                homepage="https://github.com/Xquik-dev/hermes-tweet",
+                source_url="https://github.com/Xquik-dev/hermes-tweet",
+                created_at=datetime.utcnow() - timedelta(days=5),
+                updated_at=datetime.utcnow()
+            ),
+            Entity(
                 uid="mcp-database-001",
                 type="mcp_server",
                 name="PostgreSQL MCP Server",
